@@ -22,7 +22,7 @@ class Halt extends Error { constructor(status, message) { super(message); this.s
 // Auto-run, single-step and grading consume this same generator.
 export function* execute(scene, program, rules = {}) {
   let position = [...scene.start], painted = new Set(scene.initialPaint.map(cellKey));
-  let operations = 0, activeId = null;
+  let operations = 0, activeId = null, blocked=null;
   const used = new Set(), calls = {};
   const snapshot = () => ({ position: [...position], painted: [...painted], operations });
   function guard() {
@@ -41,6 +41,7 @@ export function* execute(scene, program, rules = {}) {
       if (n.type === 'move') {
         const d = DIRECTIONS[n.direction], next = [position[0]+d.dr,position[1]+d.dc];
         if (!canMove(scene, position, n.direction)) {
+          blocked={from:[...position],next,direction:n.direction};
           const status = inBounds(scene,next) ? 'wall' : 'boundary';
           const message = status === 'wall' ? 'На пути преграда. Проверь эту команду или условие перед движением.' : 'Роби дошёл до края поля. Выбери другое направление или проверь свободный путь.';
           yield event(n, 'error', message, { error: status, scope });
@@ -85,7 +86,7 @@ export function* execute(scene, program, rules = {}) {
       const absent = (rules.required || []).filter(type => !used.has(type));
       if (absent.length || (rules.minCalls && Object.values(calls).reduce((a,b)=>a+b,0) < rules.minCalls) || (rules.requiredCalls || []).some(name => !calls[name])) result = { status: 'needs-construct', message: 'Поле решено, но учебная задача ещё не завершена. Используй конструкции, указанные в цели уровня.' };
     }
-  } catch (error) { result = { status: error.status || 'invalid', message: error.message, nodeId: activeId }; }
+  } catch (error) { result = { status: error.status || 'invalid', message: error.message, nodeId: activeId, ...(blocked?{blocked}:{}) }; }
   yield { kind: 'finish', result: { ...result, ...snapshot(), used: [...used], calls } };
 }
 export function simulate(scene, program, rules = {}) {

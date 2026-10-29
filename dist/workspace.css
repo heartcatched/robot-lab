@@ -1,0 +1,155 @@
+/* Compact training workspace. The original welcome screen and visual identity remain. */
+body:not(.training) .workspace,body:not(.training) .mode-bar{display:none}
+body:not(.training) .hero{min-height:420px;align-items:center}
+body:not(.training) .learning-strip{padding-bottom:50px}
+body.training{height:100dvh;overflow:hidden}
+.training .hero,.training .learning-strip,.training>.site-footer{display:none}
+.training .site-header{height:64px;min-height:64px;padding:10px 24px;max-width:1600px}
+.training .brand img{width:34px;height:34px}.training .brand>span{font-size:25px}.training .brand-sub{font-size:9px}
+.training .page-shell{height:calc(100dvh - 64px);max-width:1600px;padding:0 20px 14px;display:flex;flex-direction:column;min-height:0}
+.training .mode-bar{flex-shrink:0;min-height:48px;margin:0 0 8px;gap:7px}
+.training .mode-bar button{min-height:38px;padding:7px 13px;font-size:12px}
+#quick-results{margin-left:auto;font-variant-numeric:tabular-nums}#levels-button{display:none}
+.training .mode-bar>span{display:none}
+.training .workspace{flex:1;min-height:0;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:stretch;outline:none}
+.training .journey{position:static;min-height:0;height:100%;display:flex;flex-direction:column;padding:20px 12px}
+.training .journey:after{display:none}
+.training .journey h2{font-size:15px}.training .journey .level-list{overflow:auto;max-height:calc(100dvh - 390px)}
+.training .journey-footer{margin-top:auto;padding-top:15px}
+.training .lesson{padding:18px;display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}
+.training .lesson-header{flex-shrink:0;margin-bottom:10px;align-items:center;gap:10px}
+.training .lesson-header>div:first-child{flex:1;overflow:hidden}
+.training .lesson-header h2{font-size:23px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.training .lesson-header p{font-size:13px;line-height:1.5;margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.training .lesson-eyebrow{font-size:10px;gap:8px}
+.training .lesson-pagination{margin:0;gap:6px;align-items:center;flex-shrink:0}
+#pagination{display:flex;gap:4px}.training .lesson-pagination .icon-button{height:38px;width:35px}
+#task-button{font-size:12px;min-height:38px;padding:7px 10px}
+.training .play-area{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:stretch}
+.training .board-panel{min-height:0;height:100%;display:flex;flex-direction:column;position:relative}
+.training .panel-label{padding:10px 12px 0;flex-shrink:0}
+.training .panel-label h3{font-size:11px}.training .variants{flex-shrink:0;flex-wrap:wrap;margin:6px 8px 0;gap:4px;align-items:center}
+.training .variants button{min-height:30px;padding:4px 7px;font-size:11px}.variant-summary{font-size:10px;color:#567345;white-space:nowrap}
+.training .board-wrap{flex:1;min-height:0;padding:8px;display:grid;place-items:center;overflow:hidden}
+.training .board{margin:0;width:100%;max-width:none;max-height:none;border-width:4px;flex-shrink:0}
+.training .board-legend{flex-shrink:0;padding:3px 8px 7px;gap:6px 12px;font-size:10px;line-height:1.5}
+.training .board-status{flex-shrink:0;padding:7px 8px;min-height:34px;font-size:11px;line-height:1.4}
+.training .board-status>span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.training .editor{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.training .editor-heading{flex-shrink:0;gap:8px}.editor-heading>div{display:flex;align-items:center;gap:6px}
+.training .editor-heading h3{font-size:14px}.training .subtle-button{font-size:11px;min-height:30px;padding:4px}
+.training .editor-views{flex-shrink:0;margin:5px 0}.training .editor-views button{min-height:32px;padding:5px 9px;font-size:12px}
+.training #block-editor{display:flex;flex:1;min-height:0;flex-direction:column}
+.training .algorithm-tabs{flex-shrink:0;margin:0 0 5px;gap:5px}.training .algorithm-tabs button{min-height:30px;padding:4px 10px;font-size:12px}
+.training .program{flex:1;min-height:55px;max-height:none;padding:7px;overscroll-behavior:contain;scroll-padding:12px}
+.training .selection-tools{flex-shrink:0;margin-top:4px;padding-bottom:0;border:0;gap:5px;min-height:30px}
+.training .selection-tools .small-tool{width:32px;height:30px;min-width:32px}
+.training .selection-tools .tool-label{font-size:11px;line-height:1.2}
+.block-header{display:flex;align-items:center;gap:4px;flex-wrap:wrap;border-radius:4px}
+.block .block-head{flex:0 1 auto;width:auto;padding:4px;min-height:32px;font-size:12px;gap:4px}
+.block .block-head span:empty{display:none}.block .block-value{flex:1;min-width:90px;max-width:100%;width:0;padding:5px 3px;border:1px solid #ccd8bc;border-radius:5px;background:#ffffffb0;font-size:12px;min-height:32px}
+.block.executing>.block-header{background:#cce9a4;box-shadow:inset 3px 0 #5e8c39}
+.block.failed>.block-header{background:#f9d6b7;box-shadow:inset 3px 0 #b2662a}
+.block-list{margin:3px 0 3px 5px;padding-left:6px}.block{margin:4px 0}
+.insert-button,.after-insert{font-size:11px;min-height:30px;padding:5px 7px;line-height:1.3}
+.after-insert{color:#776543;text-align:left;border-top:1px dashed #dfcba4;width:100%}
+.branch-label{font-size:11px;margin:3px 6px}
+.training #palette-slot{flex-shrink:0}.drawer-title,#palette-count{display:none}
+.training .insert-caption{font-size:11px;margin:6px 0;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.training .direction-palette{gap:6px}.training .direction-button{min-height:41px;padding:4px;flex-direction:row;gap:5px;box-shadow:none}
+.training .direction-button .direction-name{font-size:11px}.training .direction-button .arrow{font-size:20px}
+.training .command-palette{margin-top:6px;gap:5px}.training .command-palette button{min-height:31px;padding:5px;font-size:11px}
+.training #code-panel{flex:1;min-height:0;display:flex;flex-direction:column}
+.training #code-panel .editor-caption{font-size:11px;margin:0 0 6px;flex-shrink:0}
+.training #kumir-code{flex:1;min-height:0;max-height:none;overflow:auto;margin:0;font-size:12px;line-height:1.65}
+.training .feedback{flex-shrink:0;position:relative;min-height:36px;margin:8px 0 0;padding:6px 10px;display:flex;align-items:center;gap:9px;border-radius:8px}
+.feedback details{min-width:0;flex:1}.feedback summary{cursor:pointer;display:flex;gap:5px;align-items:center;list-style:none;font-size:12px}
+.feedback summary::-webkit-details-marker{display:none}.feedback summary:after{content:'⌄';margin-left:4px}
+.feedback summary b{font-size:12px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}
+.feedback details>p{position:absolute;bottom:calc(100% + 4px);left:0;right:0;background:#fbfdf6;border:1px solid #c5d6b2;box-shadow:0 4px 20px #243c2820;border-radius:8px;padding:12px;max-height:180px;overflow:auto;z-index:20;font-size:13px}
+.feedback .feedback-action{margin:0;padding:0;min-height:28px;font-size:11px;flex-shrink:0;white-space:nowrap}
+#run-dock{flex-shrink:0;padding-top:8px}.training .run-actions{margin:0;gap:7px}
+.training .run-actions button{min-height:42px;font-size:13px}.training .run-button{flex:1}
+#add-command{display:none}.training .editor-bottom{margin-top:4px;min-height:25px}.training .editor-bottom label{font-size:11px}
+.training .editor-bottom select{min-height:25px;font-size:11px}.training .editor-bottom .text-button{font-size:12px;padding:3px}
+#course-save-status{font-size:10px;color:#647658}.training .editor-bottom{justify-content:space-between}
+.training .sandbox-settings{flex-shrink:0;padding:0 0 8px;margin:0 0 8px;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0}
+.training .sandbox-actions{margin:0;flex-wrap:nowrap;gap:6px}.training .sandbox-actions button{font-size:11px;min-height:32px;padding:5px 8px;white-space:nowrap}
+.training #sandbox-save-status{margin:4px 0 0;font-size:10px;line-height:1.3}
+.project-menu-actions{display:grid;gap:8px;margin-top:18px}.project-menu-actions button{border:1px solid #d2dfc4;border-radius:8px;padding:12px;text-align:left;background:#f5f8ef;font-size:13px;min-height:44px}
+.sandbox-fields{margin-top:18px}.sandbox-fields label{font-size:12px}.sandbox-fields input,.sandbox-fields select{font-size:14px}
+.field-editor{padding:16px 0;border:0}.field-editor select{font-size:14px}.field-editor p{font-size:12px}.field-options{margin:12px 0}
+.field-options label{min-height:36px;font-size:13px}.field-options input{width:17px;height:17px}
+#edge-tools{position:absolute;bottom:35px;left:7px;right:7px;background:#fffffff5;border:1px solid #b1c59d;border-radius:8px;padding:7px;z-index:8;font-size:11px;box-shadow:0 4px 15px #1e3c2820}
+#edge-directions{justify-content:center}#edge-directions button{min-width:42px;min-height:38px}
+.paint-missing{box-shadow:inset 0 0 0 3px #c68c2b}.paint-extra{box-shadow:inset 0 0 0 3px #ad593d}
+.diagnostic-mark{position:absolute;top:1px;right:1px;background:#8e4c2d;color:white;z-index:5;font:bold 13px Arial;border-radius:50%;width:16px;height:16px;display:grid;place-items:center}
+.paint-missing .diagnostic-mark{background:#8b671b}.cell.collision{box-shadow:inset 0 0 0 3px #b56c45}
+.blocked-edge{background:#bd5834!important;box-shadow:0 0 0 1px #bd5834}
+#board[data-boundary=left]{border-left-color:#bd5834}#board[data-boundary=right]{border-right-color:#bd5834}#board[data-boundary=up]{border-top-color:#bd5834}#board[data-boundary=down]{border-bottom-color:#bd5834}
+.migration-notice{font-size:12px;background:#fff3d9;border:1px solid #e4d2a9;border-radius:8px;padding:8px 12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;flex-shrink:0}
+.migration-notice button,.migration-notice a{text-decoration:underline;font-weight:600}
+.training .migration-notice{margin:4px 0;font-size:11px}
+.training .storage-notice{flex-shrink:0;margin:4px 0;padding:7px;font-size:11px}
+.modal>p,.modal .small-note{font-size:13px}.hint-panel p{font-size:13px}.modal h2{padding-right:12px}
+#backup-status{font-size:13px}#backup-preview{padding-top:12px;border-top:1px solid var(--line);margin-top:15px}#backup-preview p{font-size:13px;margin:8px 0}
+.journey-modal{padding:35px 14px 14px;background:#163e34;max-width:380px}.journey-modal .modal-close{z-index:3}
+.journey-modal .journey{display:block;min-height:0;height:auto;position:static;padding:12px}
+.journey-modal .journey h2{display:block}.journey-modal #course-navigation{display:block}.journey-modal .chapter-label{display:block}
+.journey-modal #chapter-select{width:100%;max-width:100%;margin:8px 0;font-size:14px}
+.journey-modal .level-list{display:block;max-height:45dvh;overflow:auto}
+.journey-modal .level-button{width:100%;max-width:none;min-height:48px;display:flex;justify-content:flex-start;gap:12px;font-size:13px;padding:8px;margin:3px 0}
+.journey-modal .level-name{display:block}.journey-modal .journey-footer{display:block;margin-top:10px}.journey-modal .journey-heading{display:flex;justify-content:space-between}
+@media(max-width:1023px){
+  .training .workspace{grid-template-columns:1fr;gap:0}#levels-button{display:block}
+  .training .page-shell{padding:0 12px 10px}.training .lesson{padding:14px}
+  .training .play-area{gap:14px;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+  .training .grade-badge{display:none}.training .mode-bar{min-height:44px;margin-bottom:6px}
+  .training .lesson-header p{font-size:12px}
+}
+@media(max-width:639px){
+  body:not(.training) .hero{min-height:0;padding-top:45px;padding-bottom:40px}
+  .training .site-header{height:52px;min-height:52px;padding:6px 12px;gap:6px}
+  .training .brand>span{font-size:21px}.training .brand img{width:29px;height:29px}.training .brand-sub{display:none}
+  .training .header-nav{gap:8px}.training .header-nav .text-button{font-size:11px;padding:7px 0;min-height:36px}
+  .training .page-shell{height:calc(100dvh - 52px);padding:0 8px max(5px,env(safe-area-inset-bottom));overflow:hidden}
+  .training .mode-bar{gap:4px;min-height:40px;margin-bottom:4px}.training .mode-bar button{padding:6px 9px;min-height:34px;font-size:11px;flex:0 1 auto}
+  .training #quick-results{margin-left:auto}.training .lesson{padding:8px;border-radius:12px}
+  .training .lesson-header{margin-bottom:5px;gap:5px;min-height:40px}.training .lesson-header h2{font-size:17px;line-height:1.35;margin-top:2px;letter-spacing:-.5px}
+  .training .lesson-eyebrow{font-size:9px}.training .lesson-category{display:none}.training .lesson-header p{display:none}
+  .training .lesson-pagination{gap:3px}.training .lesson-pagination .icon-button{width:27px;height:32px;min-width:27px;min-height:32px;font-size:15px}
+  .training #task-button{padding:4px 6px;min-height:32px;font-size:10px}
+  .training .play-area{display:flex;flex-direction:column;gap:6px;min-height:0}
+  .training .board-panel{height:auto;flex:0 0 clamp(224px,32dvh,275px);border-radius:9px}
+  .training[data-mode=sandbox] .board-panel{flex-basis:clamp(250px,32dvh,285px)}
+  .training .panel-label{padding:5px 8px 0;line-height:1.2}.training .panel-label h3{font-size:10px}.training .panel-label .small-label{font-size:9px}
+  .training .variants{margin:3px 5px 0;gap:4px}.training .variants button{min-height:26px;font-size:10px;padding:2px 6px}
+  .training .variant-summary{font-size:9px}.training .board-wrap{padding:4px}
+  .training .board-legend{display:none}.training .board-status{min-height:25px;padding:4px 6px;font-size:10px;line-height:1.4}
+  .training .board-status>span:last-child{display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.training .status-light{margin-top:5px}
+  .training .board{border-width:3px;border-radius:7px;box-shadow:none}
+  .training .editor{flex:1;min-height:70px}.training .editor-heading{min-height:25px}.training .editor-heading h3{font-size:12px}
+  .training .subtle-button{font-size:10px;min-height:25px}.training .editor-views{margin:0 0 3px}.training .editor-views button{min-height:27px;font-size:11px;padding:3px 9px}
+  .training .algorithm-tabs{margin-bottom:3px}.training .algorithm-tabs button{min-height:27px;font-size:10px;padding:3px 8px}
+  .training .program{padding:4px;min-height:35px}.block .block-value{font-size:12px;min-height:32px}
+  .training .selection-tools{margin-top:2px;min-height:27px}.training .selection-tools .small-tool{height:27px;min-width:32px}
+  .training .selection-tools .tool-label{font-size:10px}.insert-button,.after-insert{min-height:30px;font-size:11px}
+  .training .feedback{min-height:29px;padding:3px 6px;margin-top:5px;gap:5px}.feedback summary b{font-size:10px}.feedback .feedback-action{font-size:10px;min-height:24px}
+  .feedback details>p{font-size:12px;line-height:1.5;max-height:140px}.feedback summary:after{font-size:10px}
+  #run-dock{padding-top:5px}.training .run-actions{gap:5px}.training .run-actions button{min-height:40px;font-size:11px;padding:7px 6px}
+  #add-command{display:block;flex:0 0 auto}.training .run-button{font-size:12px!important}
+  .training .editor-bottom{min-height:23px;margin-top:3px}.training .editor-bottom label,.training .editor-bottom select{font-size:10px}.training .editor-bottom .text-button{font-size:11px}
+  #course-save-status{display:none}.training #code-panel .editor-caption{display:none}.training #kumir-code{font-size:11px;padding:8px}
+  .training .sandbox-settings{padding-bottom:5px;margin-bottom:5px}.training .sandbox-actions{gap:4px;flex-wrap:wrap}.training .sandbox-actions button{flex:1 0 auto!important;min-height:30px;font-size:10px;padding:4px 5px}
+  .training #sandbox-save-status{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+  .palette-modal{position:fixed;inset:auto 0 0;margin:0;width:100%;max-width:none;border-radius:20px 20px 0 0;max-height:70dvh;padding:18px 18px max(18px,env(safe-area-inset-bottom))}
+  .palette-modal .drawer-title{display:flex;align-items:center;justify-content:space-between;font-size:16px}
+  .palette-modal .insert-caption{font-size:12px;white-space:normal;margin:10px 0}
+  .palette-modal .direction-button{min-height:56px;flex-direction:column;gap:2px}.palette-modal .direction-button .direction-name{font-size:12px}.palette-modal .direction-button .arrow{font-size:24px}
+  .palette-modal .command-palette button{min-height:44px;font-size:12px}.palette-modal #palette-count{display:block;font-size:12px;color:#647658;margin-top:12px}
+  .training .migration-notice{font-size:10px;padding:6px;gap:5px 12px}.training .migration-notice>span{display:none}
+  #edge-tools{bottom:26px;font-size:10px;padding:5px}#edge-directions{margin-top:3px}#edge-directions button{min-height:32px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+.edge-tools-heading{display:flex;align-items:center;justify-content:space-between;gap:5px}#close-edge{min-width:28px;min-height:28px;font-size:19px}

@@ -4,13 +4,17 @@ import { resolve, extname, sep } from 'node:path';
 
 const root = resolve('dist');
 const port = Number(process.env.PORT || 4173);
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png' };
+const base = '/'+(process.env.BASE_PATH||'').replace(/^\/+|\/+$/g,'')+(process.env.BASE_PATH&&process.env.BASE_PATH!=='/'?'/':'');
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.ttf':'font/ttf', '.png': 'image/png' };
 http.createServer(async (req, res) => {
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    const file = resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
+    if(base!=='/'&&pathname===base.slice(0,-1)){res.writeHead(302,{Location:base}).end();return;}
+    if(!pathname.startsWith(base)){res.writeHead(404).end('Not found');return;}
+    const relative=pathname.slice(base.length);
+    const file = resolve(root, relative || 'index.html');
     if (!file.startsWith(root + sep)) { res.writeHead(403).end(); return; }
     const body = await readFile(file);
     res.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' }).end(body);
   } catch { res.writeHead(404).end('Not found'); }
-}).listen(port, '127.0.0.1', () => console.log(`Local: http://127.0.0.1:${port}`));
+}).listen(port, '127.0.0.1', () => console.log(`Local: http://127.0.0.1:${port}${base}`));
