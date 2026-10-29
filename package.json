@@ -1,0 +1,16 @@
+{
+  "name": "robokhod",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Командуй роботом — учебный тренажёр алгоритмов для 5–7 классов",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test tests/engine.test.mjs",
+    "test:e2e": "playwright test",
+    "check": "node --check dist/app.js && node --check dist/engine.js && node --check dist/levels.js && npm test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
