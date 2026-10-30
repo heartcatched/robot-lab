@@ -2,5 +2,4 @@ node_modules/
 artifacts/
 test-results/
 playwright-report/
-.sites-runtime/
 .DS_Store

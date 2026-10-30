@@ -6,7 +6,6 @@ import { loadState, freshState, STORAGE_KEY, SANDBOX_KEY } from './storage.js';
 import { blankProject, exportProject, importProject, encodeTask, decodeTask } from './sandbox.js';
 import { createBackup, parseBackup, restoreBackup } from './backup.js';
 import { EditHistory } from './history.js';
-import { PRIMARY_SITE_URL, LEGACY_HOST } from './deployment.js';
 
 const $=id=>document.getElementById(id);
 const h=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -318,14 +317,10 @@ $('copy-course-menu').onclick=()=>$('copy-course').click();
 $('project-menu').addEventListener('click',e=>{if(e.target.closest('.project-menu-actions button'))$('project-menu').close();});
 function downloadJSON(data,name){const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function openBackup(){pendingBackup=null;$('backup-preview').hidden=true;$('backup-status').textContent='';$('backup-dialog').showModal();}
-$('migration-backup').onclick=openBackup;
 $('download-backup').onclick=()=>{try{let saved=null;try{const raw=storage.getItem(SANDBOX_KEY);if(raw)saved=importProject(raw);}catch(error){if(loaded.storageOK)throw error;}
-  const backup=createBackup({progress:state,sandboxSaved:saved,sandboxWorking:sandbox},LEVELS);downloadJSON(backup,'robokhod-backup.json');$('backup-status').textContent='Файл скачан. Открой его через «Восстановить из файла» на новом сайте.';
+  const backup=createBackup({progress:state,sandboxSaved:saved,sandboxWorking:sandbox},LEVELS);downloadJSON(backup,'robokhod-backup.json');$('backup-status').textContent='Файл скачан. Для восстановления открой его здесь через «Восстановить из файла».';
 }catch(error){$('backup-status').textContent='Не удалось создать копию: '+error.message;}};
 $('open-backup').onclick=()=>$('backup-file').click();
 $('backup-file').onchange=async e=>{const file=e.target.files[0];e.target.value='';pendingBackup=null;$('backup-preview').hidden=true;if(!file)return;try{if(file.size>2097152)throw Error('Максимум — 2 МБ.');pendingBackup=parseBackup(await file.text(),LEVELS);const done=Object.values(pendingBackup.progress.levels).filter(e=>e.completed).length;$('backup-summary').textContent=`В файле: ${done} пройденных уровней, последний уровень — ${pendingBackup.progress.current}. Сохранённый проект: ${pendingBackup.sandboxSaved?.title||'нет'}. Текущий проект: ${pendingBackup.sandboxWorking?.title||'нет'}.`;$('backup-preview').hidden=false;$('backup-status').textContent='Файл проверен. Текущие данные пока не изменены.';}catch(error){$('backup-status').textContent='Файл не открыт: '+error.message;}};
 $('restore-backup').onclick=()=>{if(!pendingBackup||busy())return;try{const backup=restoreBackup(storage,pendingBackup,LEVELS);state=backup.progress;sandbox=backup.sandboxWorking||backup.sandboxSaved||blankProject();sandboxDirty=JSON.stringify(sandbox)!==JSON.stringify(backup.sandboxSaved);sandboxSource='file';if(sandboxDirty)markDirty();else $('sandbox-save-status').textContent='Восстановлен сохранённый черновик.';history.clear();mode='course';navigate(state.current);$('backup-dialog').close();pendingBackup=null;feedback('success','Сохранения восстановлены','Программы и результаты перенесены. Текущий проект песочницы доступен во вкладке «Песочница».');}catch(error){$('backup-status').textContent=error.message;}};
-function renderMigration(){const show=!!PRIMARY_SITE_URL&&location.hostname===LEGACY_HOST;$('migration-notice').hidden=!show;if(show)$('migration-link').href=PRIMARY_SITE_URL+(location.hash.startsWith('#task=')?location.hash:'');}
-window.addEventListener('hashchange',renderMigration);
 resetWorld();render();ready();openShared();
-renderMigration();
