@@ -19,6 +19,7 @@ const history=new EditHistory(),UI_KEY='robokhod-ui-v1';
 let training=false,pendingBackup=null,titleBefore=null,settingsOpened=false;
 const phone=matchMedia('(max-width: 639px)'),compactNav=matchMedia('(max-width: 1023px)');
 try{training=JSON.parse(storage.getItem(UI_KEY)||'{}').started===true||!!storage.getItem(STORAGE_KEY)||!!storage.getItem('robokhod-progress-v1');}catch{}
+let hasStarted=training;
 try{const raw=storage.getItem(SANDBOX_KEY);if(raw)sandbox=importProject(raw);}catch{/* A damaged draft does not prevent training. */}
 const level=()=>LEVELS.find(l=>l.id===state.current);
 const entry=()=>state.levels[state.current];
@@ -43,12 +44,12 @@ function feedback(type,title,message,action){
 }
 function syncShell(){
   document.body.classList.toggle('training',training);$('home-button').hidden=!training;
-  $('start-button').textContent=storageHasProgress()?'Продолжить тренировку ↗':'Начать тренировку ↗';
+  $('start-label').textContent=hasStarted?'Продолжить тренировку':'Начать тренировку';
+  $('start-note').textContent=hasStarted?(mode==='sandbox'?'Вернёшься к своему полю и программе в песочнице.':`Вернёшься к уровню ${state.current}: «${level().title}».`):'Нажми, чтобы открыть первый уровень и провести Роби до станции.';
   if(compactNav.matches){$('journey-slot').append($('journey'));}else{$('journey-dialog').close();$('workspace').prepend($('journey'));}
   if(phone.matches){$('palette-dialog').append($('command-drawer'));}else{$('palette-dialog').close();$('palette-slot').append($('command-drawer'));}
 }
-function storageHasProgress(){return Object.values(state.levels).some(e=>e.attempts||e.completed)||training;}
-function enterTraining(){training=true;try{storage.setItem(UI_KEY,JSON.stringify({started:true}));}catch{notice();}syncShell();}
+function enterTraining(){training=true;hasStarted=true;try{storage.setItem(UI_KEY,JSON.stringify({started:true}));}catch{notice();}syncShell();}
 function home(){if(busy())stopExecution();training=false;syncShell();window.scrollTo(0,0);$('start-button').focus();}
 function openPalette(){if(busy())return;view='blocks';renderEditor();if(phone.matches)$('palette-dialog').showModal();else $('direction-palette').querySelector('button')?.focus();}
 phone.addEventListener('change',syncShell);compactNav.addEventListener('change',syncShell);

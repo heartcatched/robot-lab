@@ -1,6 +1,12 @@
 /* Compact training workspace. The original welcome screen and visual identity remain. */
 body:not(.training) .workspace,body:not(.training) .mode-bar{display:none}
 body:not(.training) .hero{min-height:420px;align-items:center}
+.hero-intro{min-width:0}
+.hero-action{margin-top:24px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.hero .start-button{min-height:58px;min-width:275px;padding:15px 24px;border-radius:12px;font-size:17px;gap:25px;justify-content:space-between;box-shadow:0 4px 0 #113b31}
+.hero .start-button>span:last-child{font-size:23px;line-height:1}
+.hero .start-button:active{transform:translateY(2px);box-shadow:0 2px 0 #113b31}
+.hero .start-note{margin:0;max-width:410px;font-size:13px;line-height:1.6;color:#52664e}
 body:not(.training) .learning-strip{padding-bottom:50px}
 body.training{height:100dvh;overflow:hidden}
 .training .hero,.training .learning-strip,.training>.site-footer{display:none}
@@ -109,6 +115,8 @@ body.training{height:100dvh;overflow:hidden}
 }
 @media(max-width:639px){
   body:not(.training) .hero{min-height:0;padding-top:45px;padding-bottom:40px}
+  .hero-action{margin-top:22px;gap:11px}.hero .start-button{width:100%;min-width:0;min-height:58px;font-size:16px;padding:15px 20px}
+  .hero .start-note{font-size:12px}.hero-side{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
   .training .site-header{height:52px;min-height:52px;padding:6px 12px;gap:6px}
   .training .brand>span{font-size:21px}.training .brand img{width:29px;height:29px}.training .brand-sub{display:none}
   .training .header-nav{gap:8px}.training .header-nav .text-button{font-size:11px;padding:7px 0;min-height:36px}
