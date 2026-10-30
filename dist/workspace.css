@@ -157,3 +157,31 @@ body.training{height:100dvh;overflow:hidden}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 
 .edge-tools-heading{display:flex;align-items:center;justify-content:space-between;gap:5px}#close-edge{min-width:28px;min-height:28px;font-size:19px}
+
+/* A long program needs its own working space on a phone. */
+#editor-size{display:none}
+@media(max-width:639px){
+  .training .editor-views{flex-wrap:wrap;align-items:center}
+  .training #editor-size{display:inline-flex;align-items:center;margin-left:auto;gap:4px;min-height:32px;padding:4px 7px;font-size:11px;color:var(--green);border:1px solid #cbd9bc;border-radius:6px;background:#f3f7eb;white-space:nowrap}
+  .training .block-header{flex-wrap:nowrap}
+  .training .block .block-value{min-width:0;font-size:16px;min-height:38px}
+  .training .block-list{margin-left:3px;padding-left:5px}
+  .training .block-list.root-list{margin-left:0;padding-left:0}
+  .training.editor-expanded .site-header,.training.editor-expanded .mode-bar,
+  .training.editor-expanded .lesson-header,.training.editor-expanded .board-panel,
+  .training.editor-expanded .sandbox-settings{display:none}
+  .training.editor-expanded .page-shell{height:100dvh;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+  .training.editor-expanded .editor{min-height:0}
+  .training.editor-expanded .editor-heading{min-height:36px}
+  .training.editor-expanded .editor-heading h3{font-size:14px}
+  .training.editor-expanded .editor-views{margin-bottom:8px}
+  .training.editor-expanded .editor-views button{min-height:40px;font-size:12px}
+  .training.editor-expanded .program{padding:8px;scroll-padding:12px}
+  .training.editor-expanded .block .block-head{min-height:42px;font-size:13px;padding:5px}
+  .training.editor-expanded .block .block-value{min-height:42px;padding:6px 4px}
+  .training.editor-expanded .insert-button,.training.editor-expanded .after-insert{min-height:40px;font-size:12px}
+  .training.editor-expanded .algorithm-tabs button{min-height:36px;font-size:12px}
+  .training.editor-expanded .selection-tools .small-tool{min-height:36px;min-width:40px}
+  .training.editor-expanded .selection-tools .tool-label{font-size:12px}
+  .training.editor-expanded #kumir-code{font-size:13px}
+}

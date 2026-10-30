@@ -47,6 +47,24 @@ function syncShell(){
   $('start-note').textContent=hasStarted?(mode==='sandbox'?'Вернёшься к своему полю и программе в песочнице.':`Вернёшься к уровню ${state.current}: «${level().title}».`):'Нажми, чтобы открыть первый уровень и провести Роби до станции.';
   if(compactNav.matches){$('journey-slot').append($('journey'));}else{$('journey-dialog').close();$('workspace').prepend($('journey'));}
   if(phone.matches){$('palette-dialog').append($('command-drawer'));}else{$('palette-dialog').close();$('palette-slot').append($('command-drawer'));}
+  if(!phone.matches||!training)setEditorExpanded(false);
+}
+function revealEditorTarget(){
+  if(view!=='blocks')return;
+  const container=$('program');
+  const target=selected?container.querySelector(`[data-block="${selected}"] > .block-header`):container.querySelector('.insert-button.active');
+  if(!target)return;
+  const box=container.getBoundingClientRect(),rect=target.getBoundingClientRect();
+  if(rect.bottom>box.bottom-10)container.scrollTop+=rect.bottom-box.bottom+10;
+  else if(rect.top<box.top+10)container.scrollTop+=rect.top-box.top-10;
+}
+function setEditorExpanded(expanded){
+  const value=!!expanded&&phone.matches&&training;
+  document.body.classList.toggle('editor-expanded',value);
+  $('editor-size').setAttribute('aria-expanded',value);
+  $('editor-size').setAttribute('aria-label',value?'Вернуться к полю':'Развернуть редактор программы');
+  $('editor-size').textContent=value?'↙ К полю':'⤢ Развернуть';
+  requestAnimationFrame(()=>{fitBoard();if(value&&(selected||insertion.id))revealEditorTarget();});
 }
 function enterTraining(){training=true;hasStarted=true;try{storage.setItem(UI_KEY,JSON.stringify({started:true}));}catch{notice();}syncShell();}
 function home(){if(busy())stopExecution();training=false;syncShell();window.scrollTo(0,0);$('start-button').focus();}
@@ -180,7 +198,7 @@ function syncControls(){
 function render(){renderNavigation();renderHeader();renderVariants();renderBoard();renderEditor();syncControls();syncShell();}
 function edited(){variantResults=null;saveProgram();resetWorld();renderVariants();renderBoard();renderEditor();$('board-status').textContent='Роби ждёт твоих команд';ready();}
 function changeProgram(fn){if(busy())return;const before=editSnapshot(),previous=clone(program()),oldSelected=selected,oldInsertion={...insertion};fn();const valid=validateProgram(program(),{draft:true,allowed:allowed()});if(!valid.ok){if(mode==='course')entry().program=previous;else sandbox.program=previous;selected=oldSelected;insertion=oldInsertion;feedback('error','Блок пока не добавлен',valid.message);renderEditor();return;}history.record(historyKey(),before,editSnapshot());edited();}
-function addBlock(n){changeProgram(()=>{const list=targetList(),index=list.findIndex(item=>item.id===selected);list.splice(index<0?list.length:index+1,0,n);selected=n.id;if(['repeat','while','if'].includes(n.type)){selected=null;insertion={id:n.id,branch:n.type==='if'?'then':'body'};}});}
+function addBlock(n){changeProgram(()=>{const list=targetList(),index=list.findIndex(item=>item.id===selected);list.splice(index<0?list.length:index+1,0,n);selected=n.id;if(['repeat','while','if'].includes(n.type)){selected=null;insertion={id:n.id,branch:n.type==='if'?'then':'body'};}});requestAnimationFrame(revealEditorTarget);}
 function findParent(list,id=null,branch=null){if(list===findNode(selected)?.list)return{id,branch};for(const n of list){for(const key of ['body','then','else'])if(n[key]){const found=findParent(n[key],n.id,key);if(found)return found;}}return null;}
 
 $('program').onclick=e=>{
@@ -188,9 +206,9 @@ $('program').onclick=e=>{
   const block=e.target.closest('[data-select]'),target=e.target.closest('[data-insert]'),after=e.target.closest('[data-after]');
   if(block||after){selected=block?.dataset.select||after.dataset.after;insertion=findParent(rootList())||{id:null,branch:null};}
   else if(target){selected=null;insertion={id:target.dataset.insert||null,branch:target.dataset.branch||null};}
-  else return;renderEditor();if(target||after)openPalette();
+  else return;renderEditor();requestAnimationFrame(revealEditorTarget);if(target||after)openPalette();
 };
-$('algorithm-tabs').onclick=e=>{const b=e.target.closest('[data-scope]');if(!b)return;scope=b.dataset.scope;selected=null;insertion={id:null,branch:null};renderEditor();};
+$('algorithm-tabs').onclick=e=>{const b=e.target.closest('[data-scope]');if(!b)return;scope=b.dataset.scope;selected=null;insertion={id:null,branch:null};renderEditor();$('program').scrollTop=0;};
 $('direction-palette').onclick=e=>{const b=e.target.closest('[data-direction]');if(b){addBlock(move(b.dataset.direction));$('direction-palette').querySelector(`[data-direction="${b.dataset.direction}"]`)?.focus({preventScroll:true});}};
 $('command-palette').onclick=e=>{const b=e.target.closest('[data-type]');if(!b)return;const creators={paint,repeat:()=>repeat(2,[]),if:()=>when('free:right',[]),while:()=>until('free:right',[]),call:()=>call('А')};addBlock(creators[b.dataset.type]());};
 $('program').onchange=e=>{const id=e.target.dataset.value;if(!id)return;const value=e.target.value;selected=id;insertion=findParent(rootList())||{id:null,branch:null};changeProgram(()=>{const n=findNode(id).node;if(n.type==='move')n.direction=value;else if(n.type==='repeat')n.count=Number(value);else if(n.type==='call')n.name=value;else n.condition=value;});};
@@ -210,6 +228,7 @@ $('course-mode').onclick=()=>switchMode('course');$('sandbox-mode').onclick=()=>
 function startExecution(automatic){
   const valid=validateProgram(program(),{allowed:allowed()}),field=validateScene(scene());
   if(!valid.ok||!field.ok){feedback('error','Проверим программу',valid.message||field.message);return false;}
+  setEditorExpanded(false);
   resetWorld();variantResults=null;renderVariants();
   if(mode==='course'){entry().attempts++;persist();}
   selected=null;run={iterator:execute(clone(scene()),clone(program()),mode==='course'?level():{}),status:automatic?'running':'paused',timer:null};
@@ -235,10 +254,10 @@ function advance(){
 function schedule(){if(run?.status!=='running')return;const delay=Number($('run-speed').value);run.timer=setTimeout(()=>{if(run?.status!=='running')return;advance();schedule();},delay);}
 $('run-button').onclick=()=>{
   if(run?.status==='running'){clearTimeout(run.timer);run.status='paused';syncControls();feedback('','Пауза','Продолжи по одному шагу или нажми «Продолжить». Чтобы изменить программу, нажми «Стоп».');return;}
-  if(run){run.status='running';syncControls();schedule();return;}
+  if(run){setEditorExpanded(false);run.status='running';syncControls();schedule();return;}
   if(startExecution(true)){advance();schedule();}
 };
-$('step-button').onclick=()=>{if(run?.status==='running')return;if(!run&&!startExecution(false))return;advance();syncControls();};
+$('step-button').onclick=()=>{if(run?.status==='running')return;if(!run&&!startExecution(false))return;setEditorExpanded(false);advance();syncControls();};
 function stopExecution(){if(run)clearTimeout(run.timer);run=null;resetWorld();renderBoard();renderEditor();$('board-status').textContent='Роби вернулся на старт';feedback('','Запуск остановлен','Программа сохранена. Можно изменить команды и попробовать ещё раз.');}
 $('stop-button').onclick=stopExecution;
 
@@ -261,6 +280,9 @@ document.querySelector('.skip-link').onclick=e=>{e.preventDefault();enterTrainin
 $('levels-button').onclick=()=>$('journey-dialog').showModal();
 $('task-button').onclick=()=>$('task-dialog').showModal();
 $('add-command').onclick=openPalette;$('close-palette').onclick=()=>$('palette-dialog').close();
+$('palette-dialog').addEventListener('close',()=>requestAnimationFrame(revealEditorTarget));
+$('editor-size').onclick=()=>setEditorExpanded(!document.body.classList.contains('editor-expanded'));
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('editor-expanded')&&!document.querySelector('dialog[open]')){e.preventDefault();setEditorExpanded(false);$('editor-size').focus({preventScroll:true});}});
 $('undo-button').onclick=undoEdit;
 window.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!e.shiftKey&&!e.target.closest('input,textarea,select,[contenteditable]')&&!document.querySelector('dialog[open]')){e.preventDefault();undoEdit();}});
 

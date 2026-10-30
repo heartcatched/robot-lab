@@ -1,5 +1,9 @@
 import {test,expect} from '@playwright/test';
+import {checkLongMobileProgram} from './mobile-editor.helpers.js';
 test.use({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+test('WebKit expands a long nested program and reveals inserted commands',async({page})=>{
+  await checkLongMobileProgram(page);
+});
 test('WebKit mobile runs, steps and resumes progress under the hosted path',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('./');await page.locator('#start-button').click();
   await page.locator('#add-command').click();for(let i=0;i<3;i++)await page.locator('[data-direction="right"]').click();await page.locator('#close-palette').click();await page.locator('#step-button').click();await expect(page.locator('#board-status')).toContainText('1. Шаг');
